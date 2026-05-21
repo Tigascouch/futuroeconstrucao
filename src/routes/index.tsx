@@ -35,7 +35,7 @@ function Landing() {
         <section className="grid items-center gap-12 lg:grid-cols-2">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
-              ODS 4 · Educação de qualidade
+              Futuro em Construção
             </span>
             <h1 className="mt-5 font-display text-4xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-6xl">
               Aprender ficou{" "}
