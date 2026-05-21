@@ -24,7 +24,6 @@ const baseNavItems = [
   { to: "/meetings", label: "Aulas", icon: Video },
   { to: "/reminders", label: "Lembretes", icon: CalendarCheck },
   { to: "/profile", label: "Perfil", icon: User },
-  { to: "/help", label: "Ajuda", icon: HelpCircle },
 ] as const;
 
 function AuthLayout() {
@@ -34,7 +33,7 @@ function AuthLayout() {
   const [open, setOpen] = useState(false);
   const isModerator = useIsModerator();
   const navItems = isModerator
-    ? [...baseNavItems, { to: "/moderation", label: "Moderação", icon: Shield } as const]
+    ? [...baseNavItems, { to: "/moderation", label: "Moderação", icon: Shield } as const, { to: "/help", label: "Ajuda", icon: HelpCircle } as const]
     : baseNavItems;
 
   async function handleLogout() {
