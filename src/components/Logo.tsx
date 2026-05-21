@@ -16,7 +16,7 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
         <GraduationCap size={s.icon} strokeWidth={2.2} />
       </div>
       <span className={`font-display font-semibold tracking-tight ${s.text}`}>
-        Saber<span className="text-primary">+</span>
+        Aprender<span className="text-primary">+</span>
       </span>
     </div>
   );

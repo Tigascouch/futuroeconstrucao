@@ -43,7 +43,7 @@ function Signup() {
     });
     setLoading(false);
     if (error) return toast.error(error.message.includes("registered") ? "Este e-mail já está cadastrado" : error.message);
-    toast.success("Conta criada! Bem-vindo(a) ao Saber+.");
+    toast.success("Conta criada! Bem-vindo(a) ao Aprender+.");
     navigate({ to: "/dashboard" });
   }
 
