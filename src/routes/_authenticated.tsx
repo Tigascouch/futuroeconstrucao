@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useIsModerator } from "@/lib/use-is-moderator";
 import { Logo } from "@/components/Logo";
-import { LayoutDashboard, BookOpen, Video, CalendarCheck, User, LogOut, Menu, X, MessagesSquare, Shield } from "lucide-react";
+import { LayoutDashboard, BookOpen, Video, CalendarCheck, User, LogOut, Menu, X, MessagesSquare, Shield, MessageCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -20,6 +20,7 @@ const baseNavItems = [
   { to: "/dashboard", label: "Início", icon: LayoutDashboard },
   { to: "/studies", label: "Estudos", icon: BookOpen },
   { to: "/chat", label: "Chat", icon: MessagesSquare },
+  { to: "/direct", label: "Conversas", icon: MessageCircle },
   { to: "/meetings", label: "Aulas", icon: Video },
   { to: "/reminders", label: "Lembretes", icon: CalendarCheck },
   { to: "/profile", label: "Perfil", icon: User },
