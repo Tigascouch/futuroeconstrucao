@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useIsModerator } from "@/lib/use-is-moderator";
-import { Shield, EyeOff, Check, X, AlertTriangle, Trash2 } from "lucide-react";
+import { Shield, EyeOff, Check, X, AlertTriangle, Trash2, GraduationCap, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/moderation")({ component: ModerationPage });
+
+type Teacher = { user_id: string; profile?: { full_name: string; email: string } | null };
 
 type Report = {
   id: string;
@@ -34,6 +36,75 @@ function ModerationPage() {
   const { user } = useAuth();
   const isModerator = useIsModerator();
   const queryClient = useQueryClient();
+  const [teacherEmail, setTeacherEmail] = useState("");
+  const [assigningTeacher, setAssigningTeacher] = useState(false);
+
+  const { data: teachers = [] } = useQuery({
+    queryKey: ["teachers_list"],
+    enabled: isModerator,
+    queryFn: async () => {
+      const { data: roles } = await supabase
+        .from("user_roles")
+        .select("user_id")
+        .eq("role", "teacher");
+      const ids = (roles ?? []).map((r) => r.user_id);
+      if (ids.length === 0) return [] as Teacher[];
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, full_name, email")
+        .in("id", ids);
+      return ids.map((id) => {
+        const p = profiles?.find((pr) => pr.id === id);
+        return { user_id: id, profile: p ? { full_name: p.full_name, email: p.email } : null };
+      }) as Teacher[];
+    },
+  });
+
+  async function assignTeacher(e: React.FormEvent) {
+    e.preventDefault();
+    const email = teacherEmail.trim().toLowerCase();
+    if (!email) return;
+    setAssigningTeacher(true);
+    const { data: profile, error: pErr } = await supabase
+      .from("profiles")
+      .select("id, email")
+      .ilike("email", email)
+      .maybeSingle();
+    if (pErr || !profile) {
+      setAssigningTeacher(false);
+      toast.error("Usuário não encontrado com esse e-mail.");
+      return;
+    }
+    const { error } = await supabase
+      .from("user_roles")
+      .insert({ user_id: profile.id, role: "teacher" });
+    setAssigningTeacher(false);
+    if (error) {
+      if (error.code === "23505") toast.error("Este usuário já é Professor.");
+      else toast.error("Não foi possível atribuir o cargo.");
+      return;
+    }
+    toast.success("Cargo de Professor atribuído!");
+    setTeacherEmail("");
+    queryClient.invalidateQueries({ queryKey: ["teachers_list"] });
+    queryClient.invalidateQueries({ queryKey: ["teacher_ids"] });
+  }
+
+  async function removeTeacher(userId: string) {
+    const { error } = await supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", userId)
+      .eq("role", "teacher");
+    if (error) {
+      toast.error("Não foi possível remover.");
+      return;
+    }
+    toast.success("Cargo de Professor removido.");
+    queryClient.invalidateQueries({ queryKey: ["teachers_list"] });
+    queryClient.invalidateQueries({ queryKey: ["teacher_ids"] });
+  }
+
 
   const { data: reports = [], isLoading } = useQuery({
     queryKey: ["chat_reports"],
@@ -145,6 +216,61 @@ function ModerationPage() {
         <StatCard label="Resolvidas" value={reports.filter((r) => r.status === "reviewed").length} />
         <StatCard label="Descartadas" value={reports.filter((r) => r.status === "dismissed").length} />
       </div>
+
+      <section className="space-y-3 rounded-2xl border border-border bg-card p-5">
+        <div className="flex items-center gap-2">
+          <GraduationCap size={18} className="text-amber-500" />
+          <h2 className="font-display text-lg font-semibold">Professores</h2>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Atribua o cargo de Professor a um usuário pelo e-mail. Eles terão uma tag de destaque no chat.
+        </p>
+        <form onSubmit={assignTeacher} className="flex flex-col gap-2 sm:flex-row">
+          <input
+            type="email"
+            value={teacherEmail}
+            onChange={(e) => setTeacherEmail(e.target.value)}
+            placeholder="email@exemplo.com"
+            className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+          />
+          <Button type="submit" disabled={assigningTeacher || !teacherEmail.trim()}>
+            <UserPlus size={14} /> {assigningTeacher ? "Atribuindo…" : "Tornar Professor"}
+          </Button>
+        </form>
+
+        {teachers.length > 0 && (
+          <div className="space-y-2 pt-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Professores atuais ({teachers.length})
+            </p>
+            <div className="space-y-1.5">
+              {teachers.map((t) => (
+                <div
+                  key={t.user_id}
+                  className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">
+                      {t.profile?.full_name || "Sem nome"}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {t.profile?.email || t.user_id}
+                    </p>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => removeTeacher(t.user_id)}
+                    aria-label="Remover Professor"
+                  >
+                    <X size={14} />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
 
       <section className="space-y-3">
         <h2 className="font-display text-lg font-semibold">Denúncias pendentes</h2>
