@@ -30,6 +30,10 @@ function AuthLayout() {
   const router = useRouter();
   const location = useLocation();
   const [open, setOpen] = useState(false);
+  const isModerator = useIsModerator();
+  const navItems = isModerator
+    ? [...baseNavItems, { to: "/moderation", label: "Moderação", icon: Shield } as const]
+    : baseNavItems;
 
   async function handleLogout() {
     await supabase.auth.signOut();
