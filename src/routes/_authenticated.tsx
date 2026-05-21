@@ -1,8 +1,9 @@
 import { createFileRoute, Outlet, redirect, Link, useRouter, useLocation } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { useIsModerator } from "@/lib/use-is-moderator";
 import { Logo } from "@/components/Logo";
-import { LayoutDashboard, BookOpen, Video, CalendarCheck, User, LogOut, Menu, X, MessagesSquare } from "lucide-react";
+import { LayoutDashboard, BookOpen, Video, CalendarCheck, User, LogOut, Menu, X, MessagesSquare, Shield } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/_authenticated")({
   component: AuthLayout,
 });
 
-const navItems = [
+const baseNavItems = [
   { to: "/dashboard", label: "Início", icon: LayoutDashboard },
   { to: "/studies", label: "Estudos", icon: BookOpen },
   { to: "/chat", label: "Chat", icon: MessagesSquare },
