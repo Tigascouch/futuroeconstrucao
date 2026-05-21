@@ -24,7 +24,6 @@ const baseNavItems = [
   { to: "/meetings", label: "Aulas", icon: Video },
   { to: "/reminders", label: "Lembretes", icon: CalendarCheck },
   { to: "/profile", label: "Perfil", icon: User },
-  { to: "/help", label: "Ajuda", icon: HelpCircle },
 ] as const;
 
 function AuthLayout() {
