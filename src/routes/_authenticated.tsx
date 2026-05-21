@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useIsModerator } from "@/lib/use-is-moderator";
 import { Logo } from "@/components/Logo";
-import { LayoutDashboard, BookOpen, Video, CalendarCheck, User, LogOut, Menu, X, MessagesSquare, Shield, MessageCircle } from "lucide-react";
+import { LayoutDashboard, BookOpen, Video, CalendarCheck, User, LogOut, Menu, X, MessagesSquare, Shield, MessageCircle, HelpCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
