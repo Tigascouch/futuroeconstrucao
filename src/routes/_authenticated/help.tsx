@@ -1,11 +1,23 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import {
   LayoutDashboard, BookOpen, MessagesSquare, MessageCircle, Video,
   CalendarCheck, User, Shield, LogIn, UserPlus, KeyRound, LogOut,
   Bell, Trash2, Send, Search, ShieldCheck,
 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/help")({
+  beforeLoad: async () => {
+    if (typeof window === "undefined") return;
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw redirect({ to: "/login" });
+    const { data: roles } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id);
+    const allowed = (roles ?? []).some((r) => r.role === "moderator" || r.role === "admin");
+    if (!allowed) throw redirect({ to: "/dashboard" });
+  },
   head: () => ({
     meta: [
       { title: "Comandos & Ajuda — Aprender Mais" },
