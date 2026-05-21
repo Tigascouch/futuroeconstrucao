@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useIsModerator } from "@/lib/use-is-moderator";
-import { Send, MessagesSquare, Trash2, Flag, EyeOff, ShieldCheck } from "lucide-react";
+import { Send, MessagesSquare, Trash2, Flag, EyeOff, ShieldCheck, GraduationCap } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
