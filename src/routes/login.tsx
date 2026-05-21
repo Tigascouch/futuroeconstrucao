@@ -4,7 +4,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/Logo";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, ArrowLeft } from "lucide-react";
 
 export const Route = createFileRoute("/login")({ component: Login });
 
@@ -65,7 +65,15 @@ export function AuthShell({ title, subtitle, children }: { title: string; subtit
         </div>
         <p className="text-xs text-primary-foreground/70">ODS 4 · Educação de Qualidade</p>
       </div>
-      <div className="flex items-center justify-center px-6 py-12">
+      <div className="relative flex items-center justify-center px-6 py-12">
+        <button
+          type="button"
+          onClick={() => (window.history.length > 1 ? window.history.back() : (window.location.href = "/"))}
+          className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-xl border border-border bg-background/60 px-3 py-2 text-xs font-medium text-foreground/80 backdrop-blur transition hover:bg-background hover:text-foreground"
+          aria-label="Voltar"
+        >
+          <ArrowLeft size={14} /> Voltar
+        </button>
         <div className="w-full max-w-sm">
           <div className="mb-8 lg:hidden"><Logo /></div>
           <h1 className="font-display text-3xl font-bold tracking-tight">{title}</h1>
