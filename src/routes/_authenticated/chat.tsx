@@ -193,15 +193,23 @@ function ChatPage() {
           ) : (
             messages.map((m) => {
               const mine = m.user_id === user?.id;
+              const isTeacher = teacherIds.has(m.user_id);
               return (
                 <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                   <div
                     className={`group max-w-[80%] rounded-2xl px-4 py-2 text-sm ${
                       mine ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"
-                    } ${m.hidden ? "opacity-60 italic" : ""}`}
+                    } ${isTeacher && !mine ? "ring-2 ring-amber-400/60" : ""} ${m.hidden ? "opacity-60 italic" : ""}`}
                   >
-                    {!mine && (
-                      <p className="mb-0.5 text-[11px] font-semibold opacity-70">{m.author_name}</p>
+                    {(!mine || isTeacher) && (
+                      <p className="mb-0.5 flex items-center gap-1.5 text-[11px] font-semibold opacity-80">
+                        {!mine && <span>{m.author_name}</span>}
+                        {isTeacher && (
+                          <span className={`inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${mine ? "bg-primary-foreground/20 text-primary-foreground" : "bg-amber-400/20 text-amber-700 dark:text-amber-300"}`}>
+                            <GraduationCap size={9} /> Professor
+                          </span>
+                        )}
+                      </p>
                     )}
                     {m.hidden ? (
                       <p className="text-xs">[Mensagem ocultada pela moderação]</p>
