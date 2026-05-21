@@ -70,6 +70,17 @@ function ChatPage() {
     },
   });
 
+  const { data: teacherIds = new Set<string>() } = useQuery({
+    queryKey: ["teacher_ids"],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("user_id")
+        .eq("role", "teacher");
+      return new Set((data ?? []).map((r) => r.user_id));
+    },
+  });
+
   useEffect(() => {
     const channel = supabase
       .channel("chat_messages_realtime")
