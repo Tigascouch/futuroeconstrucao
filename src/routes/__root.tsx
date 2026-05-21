@@ -47,7 +47,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Saber+ — Apoio ao aprendizado para a rede pública" },
+      { title: "Aprender+ — Apoio ao aprendizado para a rede pública" },
       { name: "description", content: "Plataforma educacional alinhada à ODS 4: tire dúvidas, agende aulas e organize seus estudos." },
     ],
     links: [
