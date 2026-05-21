@@ -1,14 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useIsModerator } from "@/lib/use-is-moderator";
-import { Shield, EyeOff, Check, X, AlertTriangle, Trash2 } from "lucide-react";
+import { Shield, EyeOff, Check, X, AlertTriangle, Trash2, GraduationCap, UserPlus } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/moderation")({ component: ModerationPage });
+
+type Teacher = { user_id: string; profile?: { full_name: string; email: string } | null };
 
 type Report = {
   id: string;
