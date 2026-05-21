@@ -21,8 +21,10 @@ import { Route as AuthenticatedRemindersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedModerationRouteImport } from './routes/_authenticated/moderation'
 import { Route as AuthenticatedMeetingsRouteImport } from './routes/_authenticated/meetings'
+import { Route as AuthenticatedDirectRouteImport } from './routes/_authenticated/direct'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated/chat'
+import { Route as AuthenticatedDirectConversationIdRouteImport } from './routes/_authenticated/direct.$conversationId'
 import { Route as LovableEmailQueueProcessRouteImport } from './routes/lovable/email/queue/process'
 
 const SignupRoute = SignupRouteImport.update({
@@ -84,6 +86,11 @@ const AuthenticatedMeetingsRoute = AuthenticatedMeetingsRouteImport.update({
   path: '/meetings',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDirectRoute = AuthenticatedDirectRouteImport.update({
+  id: '/direct',
+  path: '/direct',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -94,6 +101,12 @@ const AuthenticatedChatRoute = AuthenticatedChatRouteImport.update({
   path: '/chat',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDirectConversationIdRoute =
+  AuthenticatedDirectConversationIdRouteImport.update({
+    id: '/$conversationId',
+    path: '/$conversationId',
+    getParentRoute: () => AuthenticatedDirectRoute,
+  } as any)
 const LovableEmailQueueProcessRoute =
   LovableEmailQueueProcessRouteImport.update({
     id: '/lovable/email/queue/process',
@@ -110,11 +123,13 @@ export interface FileRoutesByFullPath {
   '/signup': typeof SignupRoute
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/direct': typeof AuthenticatedDirectRouteWithChildren
   '/meetings': typeof AuthenticatedMeetingsRoute
   '/moderation': typeof AuthenticatedModerationRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/reminders': typeof AuthenticatedRemindersRoute
   '/studies': typeof AuthenticatedStudiesRoute
+  '/direct/$conversationId': typeof AuthenticatedDirectConversationIdRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesByTo {
@@ -126,11 +141,13 @@ export interface FileRoutesByTo {
   '/signup': typeof SignupRoute
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/direct': typeof AuthenticatedDirectRouteWithChildren
   '/meetings': typeof AuthenticatedMeetingsRoute
   '/moderation': typeof AuthenticatedModerationRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/reminders': typeof AuthenticatedRemindersRoute
   '/studies': typeof AuthenticatedStudiesRoute
+  '/direct/$conversationId': typeof AuthenticatedDirectConversationIdRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRoutesById {
@@ -144,11 +161,13 @@ export interface FileRoutesById {
   '/signup': typeof SignupRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/direct': typeof AuthenticatedDirectRouteWithChildren
   '/_authenticated/meetings': typeof AuthenticatedMeetingsRoute
   '/_authenticated/moderation': typeof AuthenticatedModerationRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/reminders': typeof AuthenticatedRemindersRoute
   '/_authenticated/studies': typeof AuthenticatedStudiesRoute
+  '/_authenticated/direct/$conversationId': typeof AuthenticatedDirectConversationIdRoute
   '/lovable/email/queue/process': typeof LovableEmailQueueProcessRoute
 }
 export interface FileRouteTypes {
@@ -162,11 +181,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/chat'
     | '/dashboard'
+    | '/direct'
     | '/meetings'
     | '/moderation'
     | '/profile'
     | '/reminders'
     | '/studies'
+    | '/direct/$conversationId'
     | '/lovable/email/queue/process'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -178,11 +199,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/chat'
     | '/dashboard'
+    | '/direct'
     | '/meetings'
     | '/moderation'
     | '/profile'
     | '/reminders'
     | '/studies'
+    | '/direct/$conversationId'
     | '/lovable/email/queue/process'
   id:
     | '__root__'
@@ -195,11 +218,13 @@ export interface FileRouteTypes {
     | '/signup'
     | '/_authenticated/chat'
     | '/_authenticated/dashboard'
+    | '/_authenticated/direct'
     | '/_authenticated/meetings'
     | '/_authenticated/moderation'
     | '/_authenticated/profile'
     | '/_authenticated/reminders'
     | '/_authenticated/studies'
+    | '/_authenticated/direct/$conversationId'
     | '/lovable/email/queue/process'
   fileRoutesById: FileRoutesById
 }
@@ -300,6 +325,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMeetingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/direct': {
+      id: '/_authenticated/direct'
+      path: '/direct'
+      fullPath: '/direct'
+      preLoaderRoute: typeof AuthenticatedDirectRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -314,6 +346,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedChatRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/direct/$conversationId': {
+      id: '/_authenticated/direct/$conversationId'
+      path: '/$conversationId'
+      fullPath: '/direct/$conversationId'
+      preLoaderRoute: typeof AuthenticatedDirectConversationIdRouteImport
+      parentRoute: typeof AuthenticatedDirectRoute
+    }
     '/lovable/email/queue/process': {
       id: '/lovable/email/queue/process'
       path: '/lovable/email/queue/process'
@@ -324,9 +363,22 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedDirectRouteChildren {
+  AuthenticatedDirectConversationIdRoute: typeof AuthenticatedDirectConversationIdRoute
+}
+
+const AuthenticatedDirectRouteChildren: AuthenticatedDirectRouteChildren = {
+  AuthenticatedDirectConversationIdRoute:
+    AuthenticatedDirectConversationIdRoute,
+}
+
+const AuthenticatedDirectRouteWithChildren =
+  AuthenticatedDirectRoute._addFileChildren(AuthenticatedDirectRouteChildren)
+
 interface AuthenticatedRouteChildren {
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDirectRoute: typeof AuthenticatedDirectRouteWithChildren
   AuthenticatedMeetingsRoute: typeof AuthenticatedMeetingsRoute
   AuthenticatedModerationRoute: typeof AuthenticatedModerationRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
@@ -337,6 +389,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDirectRoute: AuthenticatedDirectRouteWithChildren,
   AuthenticatedMeetingsRoute: AuthenticatedMeetingsRoute,
   AuthenticatedModerationRoute: AuthenticatedModerationRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
