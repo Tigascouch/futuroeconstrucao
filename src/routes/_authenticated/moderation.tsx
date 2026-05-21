@@ -217,6 +217,61 @@ function ModerationPage() {
         <StatCard label="Descartadas" value={reports.filter((r) => r.status === "dismissed").length} />
       </div>
 
+      <section className="space-y-3 rounded-2xl border border-border bg-card p-5">
+        <div className="flex items-center gap-2">
+          <GraduationCap size={18} className="text-amber-500" />
+          <h2 className="font-display text-lg font-semibold">Professores</h2>
+        </div>
+        <p className="text-sm text-muted-foreground">
+          Atribua o cargo de Professor a um usuário pelo e-mail. Eles terão uma tag de destaque no chat.
+        </p>
+        <form onSubmit={assignTeacher} className="flex flex-col gap-2 sm:flex-row">
+          <input
+            type="email"
+            value={teacherEmail}
+            onChange={(e) => setTeacherEmail(e.target.value)}
+            placeholder="email@exemplo.com"
+            className="flex-1 rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary"
+          />
+          <Button type="submit" disabled={assigningTeacher || !teacherEmail.trim()}>
+            <UserPlus size={14} /> {assigningTeacher ? "Atribuindo…" : "Tornar Professor"}
+          </Button>
+        </form>
+
+        {teachers.length > 0 && (
+          <div className="space-y-2 pt-2">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Professores atuais ({teachers.length})
+            </p>
+            <div className="space-y-1.5">
+              {teachers.map((t) => (
+                <div
+                  key={t.user_id}
+                  className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/30 px-3 py-2 text-sm"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">
+                      {t.profile?.full_name || "Sem nome"}
+                    </p>
+                    <p className="truncate text-xs text-muted-foreground">
+                      {t.profile?.email || t.user_id}
+                    </p>
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => removeTeacher(t.user_id)}
+                    aria-label="Remover Professor"
+                  >
+                    <X size={14} />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
+
       <section className="space-y-3">
         <h2 className="font-display text-lg font-semibold">Denúncias pendentes</h2>
         {isLoading ? (
