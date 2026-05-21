@@ -21,6 +21,7 @@ import { Route as AuthenticatedRemindersRouteImport } from './routes/_authentica
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedModerationRouteImport } from './routes/_authenticated/moderation'
 import { Route as AuthenticatedMeetingsRouteImport } from './routes/_authenticated/meetings'
+import { Route as AuthenticatedHelpRouteImport } from './routes/_authenticated/help'
 import { Route as AuthenticatedDirectRouteImport } from './routes/_authenticated/direct'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated/chat'
@@ -86,6 +87,11 @@ const AuthenticatedMeetingsRoute = AuthenticatedMeetingsRouteImport.update({
   path: '/meetings',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedHelpRoute = AuthenticatedHelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDirectRoute = AuthenticatedDirectRouteImport.update({
   id: '/direct',
   path: '/direct',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/direct': typeof AuthenticatedDirectRouteWithChildren
+  '/help': typeof AuthenticatedHelpRoute
   '/meetings': typeof AuthenticatedMeetingsRoute
   '/moderation': typeof AuthenticatedModerationRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/direct': typeof AuthenticatedDirectRouteWithChildren
+  '/help': typeof AuthenticatedHelpRoute
   '/meetings': typeof AuthenticatedMeetingsRoute
   '/moderation': typeof AuthenticatedModerationRoute
   '/profile': typeof AuthenticatedProfileRoute
@@ -162,6 +170,7 @@ export interface FileRoutesById {
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/direct': typeof AuthenticatedDirectRouteWithChildren
+  '/_authenticated/help': typeof AuthenticatedHelpRoute
   '/_authenticated/meetings': typeof AuthenticatedMeetingsRoute
   '/_authenticated/moderation': typeof AuthenticatedModerationRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/dashboard'
     | '/direct'
+    | '/help'
     | '/meetings'
     | '/moderation'
     | '/profile'
@@ -200,6 +210,7 @@ export interface FileRouteTypes {
     | '/chat'
     | '/dashboard'
     | '/direct'
+    | '/help'
     | '/meetings'
     | '/moderation'
     | '/profile'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/_authenticated/chat'
     | '/_authenticated/dashboard'
     | '/_authenticated/direct'
+    | '/_authenticated/help'
     | '/_authenticated/meetings'
     | '/_authenticated/moderation'
     | '/_authenticated/profile'
@@ -325,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMeetingsRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/help': {
+      id: '/_authenticated/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof AuthenticatedHelpRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/direct': {
       id: '/_authenticated/direct'
       path: '/direct'
@@ -379,6 +398,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDirectRoute: typeof AuthenticatedDirectRouteWithChildren
+  AuthenticatedHelpRoute: typeof AuthenticatedHelpRoute
   AuthenticatedMeetingsRoute: typeof AuthenticatedMeetingsRoute
   AuthenticatedModerationRoute: typeof AuthenticatedModerationRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
@@ -390,6 +410,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDirectRoute: AuthenticatedDirectRouteWithChildren,
+  AuthenticatedHelpRoute: AuthenticatedHelpRoute,
   AuthenticatedMeetingsRoute: AuthenticatedMeetingsRoute,
   AuthenticatedModerationRoute: AuthenticatedModerationRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
