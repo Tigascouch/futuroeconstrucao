@@ -36,6 +36,75 @@ function ModerationPage() {
   const { user } = useAuth();
   const isModerator = useIsModerator();
   const queryClient = useQueryClient();
+  const [teacherEmail, setTeacherEmail] = useState("");
+  const [assigningTeacher, setAssigningTeacher] = useState(false);
+
+  const { data: teachers = [] } = useQuery({
+    queryKey: ["teachers_list"],
+    enabled: isModerator,
+    queryFn: async () => {
+      const { data: roles } = await supabase
+        .from("user_roles")
+        .select("user_id")
+        .eq("role", "teacher");
+      const ids = (roles ?? []).map((r) => r.user_id);
+      if (ids.length === 0) return [] as Teacher[];
+      const { data: profiles } = await supabase
+        .from("profiles")
+        .select("id, full_name, email")
+        .in("id", ids);
+      return ids.map((id) => {
+        const p = profiles?.find((pr) => pr.id === id);
+        return { user_id: id, profile: p ? { full_name: p.full_name, email: p.email } : null };
+      }) as Teacher[];
+    },
+  });
+
+  async function assignTeacher(e: React.FormEvent) {
+    e.preventDefault();
+    const email = teacherEmail.trim().toLowerCase();
+    if (!email) return;
+    setAssigningTeacher(true);
+    const { data: profile, error: pErr } = await supabase
+      .from("profiles")
+      .select("id, email")
+      .ilike("email", email)
+      .maybeSingle();
+    if (pErr || !profile) {
+      setAssigningTeacher(false);
+      toast.error("Usuário não encontrado com esse e-mail.");
+      return;
+    }
+    const { error } = await supabase
+      .from("user_roles")
+      .insert({ user_id: profile.id, role: "teacher" });
+    setAssigningTeacher(false);
+    if (error) {
+      if (error.code === "23505") toast.error("Este usuário já é Professor.");
+      else toast.error("Não foi possível atribuir o cargo.");
+      return;
+    }
+    toast.success("Cargo de Professor atribuído!");
+    setTeacherEmail("");
+    queryClient.invalidateQueries({ queryKey: ["teachers_list"] });
+    queryClient.invalidateQueries({ queryKey: ["teacher_ids"] });
+  }
+
+  async function removeTeacher(userId: string) {
+    const { error } = await supabase
+      .from("user_roles")
+      .delete()
+      .eq("user_id", userId)
+      .eq("role", "teacher");
+    if (error) {
+      toast.error("Não foi possível remover.");
+      return;
+    }
+    toast.success("Cargo de Professor removido.");
+    queryClient.invalidateQueries({ queryKey: ["teachers_list"] });
+    queryClient.invalidateQueries({ queryKey: ["teacher_ids"] });
+  }
+
 
   const { data: reports = [], isLoading } = useQuery({
     queryKey: ["chat_reports"],
