@@ -2,7 +2,7 @@ import { createFileRoute, Outlet, redirect, Link, useRouter, useLocation } from 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { Logo } from "@/components/Logo";
-import { LayoutDashboard, BookOpen, Video, CalendarCheck, User, LogOut, Menu, X } from "lucide-react";
+import { LayoutDashboard, BookOpen, Video, CalendarCheck, User, LogOut, Menu, X, MessagesSquare } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ export const Route = createFileRoute("/_authenticated")({
 const navItems = [
   { to: "/dashboard", label: "Início", icon: LayoutDashboard },
   { to: "/studies", label: "Estudos", icon: BookOpen },
+  { to: "/chat", label: "Chat", icon: MessagesSquare },
   { to: "/meetings", label: "Aulas", icon: Video },
   { to: "/reminders", label: "Lembretes", icon: CalendarCheck },
   { to: "/profile", label: "Perfil", icon: User },
