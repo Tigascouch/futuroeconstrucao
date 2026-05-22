@@ -70,6 +70,7 @@ function Signup() {
             <select value={form.school_stage} onChange={set("school_stage")} className="auth-input">
               <option value="fundamental">Ensino Fundamental</option>
               <option value="medio">Ensino Médio</option>
+              <option value="professor">Professor(a)</option>
             </select>
           </Field>
           <Field label="Série">
