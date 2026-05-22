@@ -12,7 +12,7 @@ const schema = z.object({
   full_name: z.string().trim().min(2, "Nome muito curto").max(100),
   email: z.string().trim().email("E-mail inválido").max(255),
   password: z.string().min(6, "Mínimo 6 caracteres").max(72),
-  school_stage: z.enum(["fundamental", "medio"]),
+  school_stage: z.enum(["fundamental", "medio", "professor"]),
   grade: z.string().trim().min(1, "Informe a série").max(50),
   school: z.string().trim().min(2, "Informe a escola").max(150),
 });
