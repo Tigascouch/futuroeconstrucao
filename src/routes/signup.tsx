@@ -19,7 +19,7 @@ const schema = z.object({
 
 function Signup() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ full_name: "", email: "", password: "", school_stage: "fundamental" as "fundamental" | "medio", grade: "", school: "" });
+  const [form, setForm] = useState({ full_name: "", email: "", password: "", school_stage: "fundamental" as "fundamental" | "medio" | "professor", grade: "", school: "" });
   const [loading, setLoading] = useState(false);
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setForm({ ...form, [k]: e.target.value });
 
