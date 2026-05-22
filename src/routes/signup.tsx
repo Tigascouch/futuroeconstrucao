@@ -49,7 +49,9 @@ function Signup() {
 
   const gradeOptions = form.school_stage === "fundamental"
     ? ["1º ano", "2º ano", "3º ano", "4º ano", "5º ano", "6º ano", "7º ano", "8º ano", "9º ano"]
-    : ["1º ano", "2º ano", "3º ano"];
+    : form.school_stage === "medio"
+    ? ["1º ano", "2º ano", "3º ano"]
+    : ["Professor(a)"];
 
   return (
     <AuthShell title="Criar sua conta" subtitle="Comece sua jornada de aprendizado hoje.">
