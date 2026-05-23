@@ -1,6 +1,6 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { Logo } from "@/components/Logo";
-import { ArrowRight, BookOpen, MessagesSquare, Video, CalendarCheck } from "lucide-react";
+import { ArrowRight, BookOpen, MessagesSquare, Video, CalendarCheck, QrCode } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/")({
