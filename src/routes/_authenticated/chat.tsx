@@ -73,11 +73,8 @@ function ChatPage() {
   const { data: teacherIds = new Set<string>() } = useQuery({
     queryKey: ["teacher_ids"],
     queryFn: async () => {
-      const { data } = await supabase
-        .from("user_roles")
-        .select("user_id")
-        .eq("role", "teacher");
-      return new Set((data ?? []).map((r) => r.user_id));
+      const { data } = await supabase.rpc("get_chat_teacher_ids");
+      return new Set(((data as string[] | null) ?? []));
     },
   });
 
