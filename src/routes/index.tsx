@@ -25,7 +25,10 @@ function Landing() {
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <Logo />
         <nav className="flex items-center gap-2">
-          <Link to="/about" className="rounded-xl px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground">Sobre nós</Link>
+          <Link to="/about" className="hidden sm:inline-flex rounded-xl px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground">Sobre nós</Link>
+          <Link to="/instalar" className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background/60 px-3 py-2 text-sm font-medium text-foreground/80 backdrop-blur hover:text-foreground">
+            <QrCode size={16} /> <span className="hidden sm:inline">Baixar no celular</span>
+          </Link>
           <Link to="/login" className="rounded-xl px-4 py-2 text-sm font-medium text-foreground/80 hover:text-foreground">Entrar</Link>
           <Link to="/signup" className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90">
             Criar conta <ArrowRight size={16} />
